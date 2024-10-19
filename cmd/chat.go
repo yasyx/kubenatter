@@ -17,7 +17,7 @@ var chatCmd = &cobra.Command{
 	The command "kubenatter chat -m gpt-4o" will chat with kubernetes using gpt4o model.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		//fmt.Printf("chat with model: %s，kubeconfig location: %s\n", model, kubeConfig)
+		fmt.Printf("You are chat with the model: %s，kubeconfig location: %s\n", model, kubeConfig)
 		startChat()
 		//clientGo, err := clientGo.NewClient(kubeConfig)
 		//if err != nil {
@@ -79,14 +79,14 @@ func startChat() {
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-		fmt.Print("> ")
+		fmt.Print("< ")
 		fmt.Println(res)
 		fmt.Print("> ")
 	}
 }
 
 func processMessage(text string) (string, error) {
-	fmt.Println("receive  message: ", text)
+	//fmt.Println("receive  message: ", text)
 	chatclient := chatclient.NewChatClient(model)
 	return chatclient.SendMessage(text)
 }

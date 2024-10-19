@@ -25,6 +25,7 @@ func NewOpenAIChatClient(model string) *OpenAIChatClient {
 var systemMessage = `
 You are a k8s administrator, you can help me to manage the k8s resources.
 When you generate a k8s resource,Do not output any content except for YAML content, and do not place YAML inside code blocks.
+If you can't understand my request, please ask me to rephrase it.
 `
 
 func (o *OpenAIChatClient) SendMessage(msg string) (string, error) {
