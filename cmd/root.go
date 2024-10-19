@@ -3,6 +3,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"k8s.io/client-go/util/homedir"
 	"os"
 )
 
@@ -26,6 +27,10 @@ var kubeConfig string
 var namespace string
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&kubeConfig, "kubeConfig", "c", "~/.kube/config", "The path to the kubernetes config file.")
+	defaultKubeConfig := ""
+	if home := homedir.HomeDir(); home != "" {
+		defaultKubeConfig = home + "/.kube/config"
+	}
+	rootCmd.PersistentFlags().StringVarP(&kubeConfig, "kubeConfig", "c", defaultKubeConfig, "The path to the kubernetes config file.")
 	rootCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", "default", "The namespace of the kubernetes resource.")
 }
