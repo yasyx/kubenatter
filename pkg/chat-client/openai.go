@@ -22,11 +22,16 @@ func NewOpenAIChatClient(model string) *OpenAIChatClient {
 	return &OpenAIChatClient{client: client, model: model}
 }
 
+var systemMessage = `
+You are a k8s administrator, you can help me to manage the k8s resources.
+When you generate a k8s resource,Do not output any content except for YAML content, and do not place YAML inside code blocks.
+`
+
 func (o *OpenAIChatClient) SendMessage(msg string) (string, error) {
 	completion, err := o.client.CreateChatCompletion(context.Background(), openai.ChatCompletionRequest{
 		Model: o.model,
 		Messages: []openai.ChatCompletionMessage{
-			{Role: openai.ChatMessageRoleSystem, Content: "You are a kubernetes administrator, you can help me to manage the k8s resources. "},
+			{Role: openai.ChatMessageRoleSystem, Content: systemMessage},
 			{Role: openai.ChatMessageRoleUser, Content: msg},
 		},
 	})

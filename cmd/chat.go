@@ -2,9 +2,11 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/spf13/cobra"
 	chatclient "github.com/yasyx/kubenatter/pkg/chat-client"
+	"os"
 )
 
 // chatCmd represents the chat command
@@ -15,19 +17,8 @@ var chatCmd = &cobra.Command{
 	The command "kubenatter chat -m gpt-4o" will chat with kubernetes using gpt4o model.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("chat with model: %s，kubeconfig location: %s\n", model, kubeConfig)
-
-		chatClient := chatclient.NewChatClient(model)
-
-		res, err := chatClient.SendMessage("Hello, Kubernetes!")
-
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-
-		fmt.Println(res)
-
+		//fmt.Printf("chat with model: %s，kubeconfig location: %s\n", model, kubeConfig)
+		startChat()
 		//clientGo, err := clientGo.NewClient(kubeConfig)
 		//if err != nil {
 		//	fmt.Println(err.Error())
@@ -69,6 +60,35 @@ var chatCmd = &cobra.Command{
 		//}
 
 	},
+}
+
+func startChat() {
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Println("Welcome to the Kubenatter! Type 'exit' to quit.")
+	fmt.Print("> ")
+	for scanner.Scan() {
+		text := scanner.Text()
+		if text == "exit" {
+			fmt.Println("bye!")
+			break
+		}
+		if text == "" {
+			continue
+		}
+		res, err := processMessage(text)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		fmt.Print("> ")
+		fmt.Println(res)
+		fmt.Print("> ")
+	}
+}
+
+func processMessage(text string) (string, error) {
+	fmt.Println("receive  message: ", text)
+	chatclient := chatclient.NewChatClient(model)
+	return chatclient.SendMessage(text)
 }
 
 var model string
