@@ -1,4 +1,4 @@
-package client_go
+package clientgo
 
 import (
 	"k8s.io/client-go/discovery"
@@ -13,7 +13,7 @@ type Client struct {
 	DiscoveryClient *discovery.DiscoveryClient
 }
 
-func NewClient(kubeconfig string) (*Client, error) {
+func NewK8SClient(kubeconfig string) (*Client, error) {
 
 	config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 	if err != nil {
